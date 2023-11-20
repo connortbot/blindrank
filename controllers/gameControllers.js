@@ -1,16 +1,15 @@
-const gameModel = require('../models/gameModel');
+const gameModel = require('../models/gameModels');
 
-const createGame = async (res,req) => {
+const createGame = async (req, res) => {
     try {
-        const { rounds, theme } = req.body;
+        const { theme, rounds } = req.body;
         const playerIds = [0];
         const initialScores = playerIds.map(() => 0);
-
         const newGame = {
+            theme,
             rounds,
             playerIds,
             scores: initialScores,
-            theme,
             status: 'waiting',
         };
 
@@ -21,7 +20,7 @@ const createGame = async (res,req) => {
     }
 }
 
-const joinGame = async (res, req) => {
+const joinGame = async (req, res) => {
     try {
         const { gameId } = req.body;
         const updatedGame = await gameModel.addPlayerToGame(gameId);
@@ -31,7 +30,7 @@ const joinGame = async (res, req) => {
     }
 }
 
-const endGame = async (res, req) => {
+const endGame = async (req, res) => {
     try {
         const { gameId } = req.body;
         const result = await gameModel.endGame(gameId);
