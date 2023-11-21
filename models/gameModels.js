@@ -22,21 +22,28 @@ const createNewGame = async (gameData) => {
     }
 };
 
-const addPlayerToGame = async (gameId) => {
+// async addPlayerToGame(gameId)
+// => finds gameSession that matches given gameIds
+const addPlayerToGame = async (gameData) => {
     try {
+        const gid = gameData.gameId;
         await client.connect();
         const db = client.db(dbName);
         const collection = db.collection('gameSessions');
         
-        const currentGame = await collection.findOne({ _id: gameId });
+        const currentGame = await collection.findOne({ gameId: gid });
         const nextPlayerId = currentGame.playerIds.length;
 
 
-        const result = await collection.updateOne(
-            { _id: gameId }, // Filter to identify the game
-            { $push: { playerIds: nextPlayerId } } // Add playerId to the playerIds array without duplicating
+        await collection.updateOne(
+            { gameId: gid }, // Filter to identify the game
+            { $push: { 
+                playerIds: nextPlayerId,
+                usernames: gameData.username,
+                scores: 0
+            } } // Add without dupe
         );
-        return result;
+        return currentGame;
     } finally {
         await client.close();
     }
