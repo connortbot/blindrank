@@ -1,18 +1,36 @@
 const gameModel = require('../models/gameModels');
 
+
+function generateGameId(username) {
+    let id = username;
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const length = 6;
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        id += characters.charAt(randomIndex);
+    }
+    return id;
+}
+
+// async createGame(req,res)
+// => From POST request, pulls theme and rounds
+// => Sends database insertion req to gameModel
 const createGame = async (req, res) => {
     try {
-        const { theme, rounds } = req.body;
+        const { username, theme, rounds } = req.body;
         const playerIds = [0];
         const initialScores = playerIds.map(() => 0);
+        const usernames = [username];
+        const newId = generateGameId(username);
         const newGame = {
+            gameId: newId,
             theme,
             rounds,
             playerIds,
+            usernames,
             scores: initialScores,
             status: 'waiting',
         };
-
         const newGameId = await gameModel.createNewGame(newGame);
         res.json({ gameId: newGameId });
     } catch (error) {

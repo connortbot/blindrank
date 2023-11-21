@@ -4,13 +4,19 @@ const client = new MongoClient(url);
 const dbName = 'blindrank';
 
 
+
+// async createNewGame(gameData)
+// => Inserts new into gameSessions using gameData
 const createNewGame = async (gameData) => {
     try {
         await client.connect();
+        console.log('Connected to MongoDB');
         const db = client.db(dbName);
         const collection = db.collection('gameSessions');
-        const result = await collection.insertOne(gameData);
-        return result.insertedId;
+        await collection.insertOne(gameData);
+        return gameData.gameId;
+    } catch (err) {
+		console.log(err);
     } finally {
         await client.close();
     }
