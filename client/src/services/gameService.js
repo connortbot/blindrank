@@ -6,8 +6,8 @@ export const createGame = async (gameData) => {
   return await axios.post(`${API_URL}/game/create`, gameData); // POST request to create a game
 };
 
-export const joinGame = async (gameId) => {
-  return await axios.post(`${API_URL}/game/join`, { gameId }); // POST request for a player to join a game
+export const joinGame = async (joinData) => {
+  return await axios.post(`${API_URL}/game/join`,joinData); // POST request for a player to join a game
 };
 
 export const endGame = async (gameId) => {

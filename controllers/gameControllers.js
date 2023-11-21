@@ -40,8 +40,12 @@ const createGame = async (req, res) => {
 
 const joinGame = async (req, res) => {
     try {
-        const { gameId } = req.body;
-        const updatedGame = await gameModel.addPlayerToGame(gameId);
+        const { username, gameId } = req.body;
+        const gameData = {
+            username,
+            gameId
+        };
+        const updatedGame = await gameModel.addPlayerToGame(gameData);
         res.json(updatedGame);
     } catch (error) {
         res.status(500).send(error.message);
