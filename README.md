@@ -1,2 +1,3 @@
-# blindrank
+# Blind Rank (pre-MVP)
+
  
