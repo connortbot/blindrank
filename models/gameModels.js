@@ -3,7 +3,7 @@ const url = 'mongoURL';
 const client = new MongoClient(url);
 const dbName = 'blindrank';
 
-
+const coll = 'games';
 
 // async createNewGame(gameData)
 // => Inserts new into gameSessions using gameData
@@ -12,7 +12,7 @@ const createNewGame = async (gameData) => {
         await client.connect();
         console.log('Connected to MongoDB');
         const db = client.db(dbName);
-        const collection = db.collection('gameSessions');
+        const collection = db.collection(coll);
         await collection.insertOne(gameData);
         return gameData.gameId;
     } catch (err) {
@@ -29,12 +29,15 @@ const addPlayerToGame = async (gameData) => {
         const gid = gameData.gameId;
         await client.connect();
         const db = client.db(dbName);
-        const collection = db.collection('gameSessions');
+        const collection = db.collection(coll);
         
         const currentGame = await collection.findOne({ gameId: gid });
+        if (!currentGame) { // gameId does not exist
+            return { "message": "game with gameID "+gid+" does not exist!" };
+        }
         const nextPlayerId = currentGame.playerIds.length;
 
-
+        
         await collection.updateOne(
             { gameId: gid }, // Filter to identify the game
             { $push: { 
@@ -43,25 +46,28 @@ const addPlayerToGame = async (gameData) => {
                 scores: 0
             } } // Add without dupe
         );
-        return currentGame;
+        return await collection.findOne({ gameId: gid });
     } finally {
         await client.close();
     }
 };
 
-const endGame = async (gameId) => {
+// async leaveGame(gameId)
+// => Deletes game from games collection if host
+// => leaves game if not host
+const leaveGame = async (pID, gID) => {
     await client.connect();
     const db = client.db(dbName);
-    const collection = db.collection('gameSessions');
-    const result = await collection.updateOne(
-        { _id: gameId },
-        { $set: { status: 'ended' } }
-    );
-    return result;
+    const collection = db.collection(coll);
+    if (pID === 0) { // is host
+        return await collection.deleteOne({ gameId: gID });
+    } else {
+        return {};
+    }
 }
 
 module.exports = {
     createNewGame,
     addPlayerToGame,
-    endGame
+    leaveGame
 }
