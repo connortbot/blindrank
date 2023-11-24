@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { joinGame } from '../services/gameService';
 
-const GameJoin = () => {
+const GameJoin = ({setgameId, setplayerId}) => {
     const [gameId, setGameId] = useState('');
     const [username, setUsername] = useState('username');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await joinGame({username, gameId});
+        const gameData = await joinGame({username, gameId});
+        setgameId(gameData.gameId);
+        setplayerId(gameData.playerIds.length - 1);
     };
 
     return (
