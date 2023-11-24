@@ -1,17 +1,20 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000'; // Base URL for your game API
+const URL = "http://localhost:5000";
 
 export const createGame = async (gameData) => {
-  return await axios.post(`${API_URL}/game/create`, gameData); // POST request to create a game
+  const response = await axios.post(`${URL}/game/create`, gameData);
+  return response.data;
 };
 
 export const joinGame = async (joinData) => {
-  return await axios.post(`${API_URL}/game/join`,joinData); // POST request for a player to join a game
+  const response = await axios.post(`${URL}/game/join`,joinData);
+  return response.data;
 };
 
-export const endGame = async (gameId) => {
-  return await axios.post(`${API_URL}/game/end-game`, { gameId }); // POST request to end a game
+export const leaveGame = async (leaveData) => {
+  const response = await axios.post(`${URL}/game/leave-game`, leaveData);
+  return response.data;
 };
 
 
