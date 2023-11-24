@@ -52,11 +52,11 @@ const joinGame = async (req, res) => {
     }
 }
 
-const endGame = async (req, res) => {
+const leaveGame = async (req, res) => {
     try {
-        const { gameId } = req.body;
-        const result = await gameModel.endGame(gameId);
-        res.json({ message: 'Game ended successfully', result });
+        const { playerId, gameId } = req.body;
+        const result = await gameModel.leaveGame(playerId, gameId);
+        res.json({ message: 'Game left successfully', result });
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -65,5 +65,5 @@ const endGame = async (req, res) => {
 module.exports = {
     createGame,
     joinGame,
-    endGame
+    leaveGame
 };
