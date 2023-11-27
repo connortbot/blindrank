@@ -35,8 +35,7 @@ const addPlayerToGame = async (gameData) => {
         if (!currentGame) { // gameId does not exist
             return { "message": "game with gameID "+gid+" does not exist!" };
         }
-        const nextPlayerId = currentGame.playerIds.length;
-
+        const nextPlayerId = currentGame.playerIds[currentGame.playerIds.length-1]+1; // last Id + 1
         
         await collection.updateOne(
             { gameId: gid }, // Filter to identify the game
@@ -56,14 +55,37 @@ const addPlayerToGame = async (gameData) => {
 // => Deletes game from games collection if host
 // => leaves game if not host
 const leaveGame = async (pID, gID) => {
-    await client.connect();
-    const db = client.db(dbName);
-    const collection = db.collection(coll);
-    if (pID === 0) { // is host
-        await collection.deleteOne({ gameId: gID });
-        return {"message": "Game left successfully!", gID};
-    } else {
-        return {"message": "Game left successfully!", gID};
+    try {
+        await client.connect();
+        const db = client.db(dbName);
+        const collection = db.collection(coll);
+        const gameData = await collection.findOne({gameId: gID});
+        // get the index of the player we're removing;
+        let ix = 0;
+        for (let i=0; i<gameData.playerIds.length; i++) {
+            if (gameData.playerIds[i] == pID) {
+                ix = i;
+            }
+        }
+        gameData.scores.splice(ix,1);
+        gameData.usernames.splice(ix,1);
+        if (pID == 0) { // is host
+            await collection.deleteOne({ gameId: gID });
+            return {"message": "Game closed successfully!", gID};
+        } else {
+            await collection.updateOne(
+                { gameId: gID },
+                { $pull: {
+                    playerIds: parseInt(pID),
+                }, $set: {
+                    usernames: gameData.usernames,
+                    scores: gameData.scores
+                }} 
+            );
+            return {"message": "Game left successfully!", gID};
+        }
+    } finally {
+        await client.close();
     }
 }
 
@@ -72,3 +94,4 @@ module.exports = {
     addPlayerToGame,
     leaveGame
 }
+
