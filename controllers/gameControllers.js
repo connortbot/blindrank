@@ -25,7 +25,7 @@ const createGame = async (req, res) => {
         const newGame = {
             gameId: newId,
             theme,
-            rounds,
+            rounds: parseInt(rounds),
             playerIds,
             usernames,
             scores: initialScores,
