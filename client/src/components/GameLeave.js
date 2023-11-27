@@ -2,12 +2,14 @@ import React from 'react';
 import { leaveGame } from '../services/gameService';
 import { socketleaveGame } from '../socket.js';
 
-const GameLeave = ({ currGameId, setcurrGameId, currPlayerId, setcurrPlayerId }) => {
+const GameLeave = () => {
     const handleLeaveGame = async () => {
+        let currPlayerId = localStorage.getItem("playerId");
+        let currGameId = localStorage.getItem("gameId");
         await leaveGame({currPlayerId, currGameId});
-        setcurrGameId('');
-        setcurrPlayerId(0);
-        socketleaveGame(currGameId);
+        socketleaveGame(currPlayerId,currGameId);
+        localStorage.setItem("gameId","");
+        localStorage.setItem("playerId",0);
     };
     return <button onClick={handleLeaveGame}>Leave Game</button>;
 };

@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import { joinGame } from '../services/gameService';
 import { socketjoinGame } from '../socket.js';
 
-const GameJoin = ({setcurrGameId, setcurrPlayerId}) => {
+const GameJoin = () => {
     const [gameId, setGameId] = useState('');
     const [username, setUsername] = useState('username');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const gameData = await joinGame({username, gameId});
+        const newId = gameData.playerIds[gameData.playerIds.length - 1]
         if (!("message" in gameData)) {
-            setcurrGameId(gameData.gameId);
-            setcurrPlayerId(gameData.playerIds.length - 1);
+            localStorage.setItem("gameId",gameData.gameId);
+            localStorage.setItem("playerId",newId);
             socketjoinGame(gameId);
         }
     };

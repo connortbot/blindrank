@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { createGame } from '../services/gameService';
 import { socketjoinGame } from '../socket.js';
 
-const GameCreate = ({setcurrGameId, setcurrPlayerId}) => {
+const GameCreate = () => {
     const [username, setUsername] = useState('');
     const [theme, setTheme] = useState('');
     const [rounds, setRounds] = useState('');
@@ -10,8 +10,8 @@ const GameCreate = ({setcurrGameId, setcurrPlayerId}) => {
         e.preventDefault();
         const gameData = await createGame({ username, theme, rounds });
         const gameId = gameData.gameId;
-        setcurrGameId(gameId);
-        setcurrPlayerId(0);
+        localStorage.setItem("gameId",gameId);
+        localStorage.setItem("playerId",0);
         socketjoinGame(gameId);
     };
 
