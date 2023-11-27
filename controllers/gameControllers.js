@@ -34,6 +34,7 @@ const createGame = async (req, res) => {
         const newGameId = await gameModel.createNewGame(newGame);
         res.json({ gameId: newGameId });
     } catch (error) {
+        console.log(`ERR_POST: createGame -> ${error.message}`);
         res.status(500).send(error.message);
     }
 }
@@ -48,16 +49,18 @@ const joinGame = async (req, res) => {
         const updatedGame = await gameModel.addPlayerToGame(gameData);
         res.json(updatedGame);
     } catch (error) {
+        console.log(`ERR_POST: joinGame -> ${error.message}`);
         res.status(500).send(error.message);
     }
 }
 
 const leaveGame = async (req, res) => {
     try {
-        const { playerId, gameId } = req.body;
-        const result = await gameModel.leaveGame(playerId, gameId);
+        const { currPlayerId, currGameId } = req.body;
+        const result = await gameModel.leaveGame(currPlayerId, currGameId);
         res.json(result);
     } catch (error) {
+        console.log(`ERR_POST: leaveGame -> ${error.message}`);
         res.status(500).send(error.message);
     }
 }
