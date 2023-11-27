@@ -5,8 +5,8 @@ const socketjoinGame = (gameId) => {
     socket.emit('joinGame', gameId);
 }
 
-const socketleaveGame = (gameId) => {
-    socket.emit('leaveGame', gameId);
+const socketleaveGame = (currPlayerId,gameId) => {
+    socket.emit('leaveGame', currPlayerId, gameId);
 }
 
 export { socketjoinGame, socketleaveGame };
