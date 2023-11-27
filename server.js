@@ -32,6 +32,11 @@ io.on('connection', (socket) => {
     console.log(`A player joined game: ${gameId}`);
   });
 
+  socket.on('leaveGame', (gameId) => {
+    socket.leave(gameId);
+    console.log(`A player left game: ${gameId}`);
+  });
+
   // Handle disconnection
   socket.on('disconnect', () => {
     console.log('Client disconnected');

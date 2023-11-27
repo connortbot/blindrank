@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { joinGame } from '../services/gameService';
+import { socketjoinGame } from '../socket.js';
 
-const GameJoin = ({setgameId, setplayerId}) => {
+const GameJoin = ({setcurrGameId, setcurrPlayerId}) => {
     const [gameId, setGameId] = useState('');
     const [username, setUsername] = useState('username');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const gameData = await joinGame({username, gameId});
-        setgameId(gameData.gameId);
-        setplayerId(gameData.playerIds.length - 1);
+        if (!("message" in gameData)) {
+            setcurrGameId(gameData.gameId);
+            setcurrPlayerId(gameData.playerIds.length - 1);
+            socketjoinGame(gameId);
+        }
     };
 
     return (
@@ -23,7 +27,7 @@ const GameJoin = ({setgameId, setplayerId}) => {
         <input 
         type="text" 
         value={gameId} 
-        onChange={(e) => setGameId(e.target.value)} // Updates gameId state when input changes
+        onChange={(e) => setGameId(e.target.value)}
         placeholder="Enter Game ID"
         />
         <button type="submit">Join Game</button>

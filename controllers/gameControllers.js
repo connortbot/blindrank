@@ -56,7 +56,7 @@ const leaveGame = async (req, res) => {
     try {
         const { playerId, gameId } = req.body;
         const result = await gameModel.leaveGame(playerId, gameId);
-        res.json({ message: 'Game left successfully', result });
+        res.json(result);
     } catch (error) {
         res.status(500).send(error.message);
     }

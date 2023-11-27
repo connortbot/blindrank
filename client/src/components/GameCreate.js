@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { createGame } from '../services/gameService';
-import { joinGame } from '../socket.js';
+import { socketjoinGame } from '../socket.js';
 
-const GameCreate = ({setgameId, setplayerId}) => {
+const GameCreate = ({setcurrGameId, setcurrPlayerId}) => {
     const [username, setUsername] = useState('');
     const [theme, setTheme] = useState('');
     const [rounds, setRounds] = useState('');
@@ -10,15 +10,15 @@ const GameCreate = ({setgameId, setplayerId}) => {
         e.preventDefault();
         const gameData = await createGame({ username, theme, rounds });
         const gameId = gameData.gameId;
-        setgameId(gameId);
-        setplayerId(0);
-        joinGame(gameId);
+        setcurrGameId(gameId);
+        setcurrPlayerId(0);
+        socketjoinGame(gameId);
     };
 
     return (
         <form onSubmit={handleSubmit}>
             <input
-            type="test"
+            type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="username"

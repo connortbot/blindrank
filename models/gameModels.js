@@ -60,9 +60,10 @@ const leaveGame = async (pID, gID) => {
     const db = client.db(dbName);
     const collection = db.collection(coll);
     if (pID === 0) { // is host
-        return await collection.deleteOne({ gameId: gID });
+        await collection.deleteOne({ gameId: gID });
+        return {"message": "Game left successfully!", gID};
     } else {
-        return {};
+        return {"message": "Game left successfully!", gID};
     }
 }
 

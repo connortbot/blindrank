@@ -4,24 +4,24 @@ import GameJoin from './components/GameJoin';
 import GameLeave from './components/GameLeave';
 
 const App = () => {
-  const [gameId, setgameId] = useState('');
-  const [playerId, setplayerId] = useState(0);
+  const [currGameId, setcurrGameId] = useState('');
+  const [currPlayerId, setcurrPlayerId] = useState(0);
   return (
     <div className="App">
       <h1>Blind Rank Game</h1>
       <GameCreate
-        setgameId={setgameId}
-        setplayerId={setplayerId}
+        setcurrGameId={setcurrGameId}
+        setcurrPlayerId={setcurrPlayerId}
       />
       <GameJoin
-        setgameId={setgameId}
-        setplayerId={setplayerId}
+        setcurrGameId={setcurrGameId}
+        setcurrPlayerId={setcurrPlayerId}
       />
       <GameLeave 
-        gameId={gameId}
-        setgameId={setgameId}
-        playerId={playerId}
-        setplayerId={setplayerId}
+        currGameId={currGameId}
+        setcurrGameId={setcurrGameId}
+        currPlayerId={currPlayerId}
+        setcurrPlayerId={setcurrPlayerId}
       />
     </div>
   );

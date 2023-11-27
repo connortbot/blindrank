@@ -1,8 +1,12 @@
 import io from 'socket.io-client';
 const socket = io('http://localhost:5000')
 
-const joinGame = (gameId) => {
+const socketjoinGame = (gameId) => {
     socket.emit('joinGame', gameId);
 }
 
-export { joinGame };
+const socketleaveGame = (gameId) => {
+    socket.emit('leaveGame', gameId);
+}
+
+export { socketjoinGame, socketleaveGame };
