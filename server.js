@@ -7,12 +7,6 @@ const gameRoutes = require('./routes/gameRoutes.js');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"]
-  }
-});
 const port = 5000;
 
 app.use(express.json());
@@ -24,6 +18,14 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+const io = socketIo(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
+
+
 io.on('connection', (socket) => {
   console.log('New client connected');
 
@@ -32,9 +34,16 @@ io.on('connection', (socket) => {
     console.log(`A player joined game: ${gameId}`);
   });
 
-  socket.on('leaveGame', (gameId) => {
-    socket.leave(gameId);
-    console.log(`A player left game: ${gameId}`);
+  socket.on('leaveGame', (currPlayerId, gameId) => {
+    if (currPlayerId === 0) {
+      io.sockets.clients(gameId).forEach(function(c) {
+        c.leave(gameId);
+      })
+      console.log(`Host has left game: ${gameId}`);
+    } else {
+      socket.leave(gameId);
+      console.log(`A player left game: ${gameId}`);
+    }
   });
 
   // Handle disconnection
