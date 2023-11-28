@@ -2,6 +2,7 @@ import React from 'react';
 import GameCreate from './components/GameCreate';
 import GameJoin from './components/GameJoin';
 import GameLeave from './components/GameLeave';
+import SetPid from './components/SetPid';
 
 // localStorage
 // "playerId"
@@ -13,6 +14,7 @@ const App = () => {
       <GameCreate/>
       <GameJoin/>
       <GameLeave/>
+      <SetPid/>
     </div>
   );
 };
